@@ -1,0 +1,36 @@
+# deps / build
+node_modules/
+dist/
+release/
+release-v8/
+.pack-staging/
+*.zip
+*.tar.gz
+
+# large / private assets that should not be pushed publicly without review
+official-reference/
+captures/
+rig-lab/
+tools/
+*.blend
+*.blend1
+*.stl
+assets/*.glb
+!assets/*.md
+
+# editor / OS
+.DS_Store
+*.log
+.env
+.private
+tmp/
+tmp/
+# keys
+.openrouter-vision-key
+
+# keep screenshots that are explicitly for README
+!docs/
+!docs/screenshots/*.png
+
+# Electron packager temp
+/tmp/electron-packager

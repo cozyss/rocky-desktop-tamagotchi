@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rocky Desktop Pet</title>
+<style>
+*{box-sizing:border-box;user-select:none}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent}body{display:grid;place-items:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif}#stage{position:relative;width: 276px;height: 182px;overflow:hidden;cursor:grab;-webkit-app-region:no-drag;touch-action:none}#stage.dragging{cursor:grabbing}#rocky-fallback{position:absolute;left:-32px;top:-97px;width:340px;height:285px;object-fit:contain;z-index:0;pointer-events:none;opacity:1;transition:opacity .18s}body.rocky-visible #rocky-fallback{opacity:0}#rocky-canvas{z-index:1;position:absolute;inset:0;width: 276px;height: 182px;pointer-events:none}
+#hitbox-debug{position:absolute;left:0;top:0;width:276px;height:182px;z-index:5;pointer-events:none;opacity:0;transition:opacity .18s}
+#hitbox-debug.on{opacity:1}
+</style></head><body>
+<div id="stage" role="button" aria-label="Drag Rocky anywhere or click for a surprise">
+<img id="rocky-fallback" src="assets/rocky-fallback-v4.png?v=tighter-hitbox-v13-bigger-up" alt="">
+<canvas id="rocky-canvas" width="612" height="376"></canvas>
+<svg id="hitbox-debug" viewBox="0 0 276 182" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="138" cy="90" rx="46" ry="35" fill="rgba(180,180,180,0.10)" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="6 4" />
+  <ellipse cx="138" cy="90" rx="46" ry="35" fill="none" stroke="#ffffff" stroke-width="0.6" stroke-dasharray="2 8" opacity="0.6" />
+  <g font-family="-apple-system, sans-serif" font-size="8.5" fill="#9a9a9a">
+    <text x="138" y="16" text-anchor="middle">torso hitbox 46×35 — up 6px, +10% — grey = clickable</text>
+  </g>
+</svg>
+</div>
+<script src="rocky3d-tighter-hitbox-v13-bigger-up.js?v=tighter-hitbox-v13-bigger-up"></script>
+<script>
+const electronBridge=Boolean(window.rocky),bridge=window.rocky||{walk(){},menu(){},dragStart(){},dragMove(){},dragEnd(){return false},pointerGuard(){},setMousePassthrough(){},onWalk(){},onCursor(){},onHitTestRefresh(){},onMousePolicy(){}};
+let busy=false,lastAction='';
+const surprises=['goodbye','knock'];
+function perform(action,{faceViewer=false}={}){if(busy)return;busy=true;const api=window.RockyScene;const duration=(faceViewer?api?.performFacingViewer?.(action):api?.perform?.(action))||1600;if(action==='walk')setTimeout(()=>bridge.walk(),50);setTimeout(()=>busy=false,duration+80)}
+function surprise(){let action;do{action=surprises[Math.floor(Math.random()*surprises.length)]}while(action===lastAction&&surprises.length>1);lastAction=action;perform(action,{faceViewer:true})}
+function walk(){perform('walk')}
+const stage=document.getElementById('stage');
+const WIDTH=276,HEIGHT=182;
+const BODY_RX=46,BODY_RY=35,BODY_CENTER_X=138,BODY_CENTER_Y=90;
+const HIT_ENTER_ALPHA=36,HIT_LEAVE_ALPHA=18,HIT_RADIUS=5,HIT_MISSES=2;
+let drag=null,contextActive=false,lastHitPoint=null,lastHitAt=0;
+const hitState={interactive:false,misses:0,maxAlpha:0,strongPixels:0,reason:'startup'};
+function insideBody(x,y){
+  const dx=x-BODY_CENTER_X, dy=y-BODY_CENTER_Y;
+  return (dx*dx)/(BODY_RX*BODY_RX) + (dy*dy)/(BODY_RY*BODY_RY) <= 1;
+}
+function publishHit(interactive,sample,reason){hitState.interactive=interactive;hitState.maxAlpha=sample?.maxAlpha||0;hitState.strongPixels=sample?.strongPixels||0;hitState.reason=reason;document.body.classList.toggle('hit-interactive',interactive);bridge.setMousePassthrough(!interactive);if(window.__rockyLive)window.__rockyLive.hitTest={...hitState,enterAlpha:HIT_ENTER_ALPHA,leaveAlpha:HIT_LEAVE_ALPHA,radius:HIT_RADIUS,dilationPx:HIT_RADIUS,missesRequired:HIT_MISSES,body:{rx:BODY_RX,ry:BODY_RY,cx:BODY_CENTER_X,cy:BODY_CENTER_Y,mode:'ellipse-body-only'}}}
+function sampleHit(x,y,{force=false}={}){lastHitPoint={x,y};const now=performance.now();if(!force&&now-lastHitAt<42)return hitState;lastHitAt=now;if(drag||contextActive){hitState.misses=0;publishHit(true,{maxAlpha:255,strongPixels:1},drag?'drag-guard':'menu-guard');return hitState}const api=window.RockyScene;if(!api?.isReady||!document.body.classList.contains('rocky-visible')){hitState.misses=0;publishHit(true,{maxAlpha:255,strongPixels:1},'loading');return hitState}if(!insideBody(x,y)){hitState.misses=0;publishHit(false,{maxAlpha:0,strongPixels:0},'outside-body');return hitState}const sample=api.interactionAlpha(x,y,HIT_RADIUS),keepsHit=sample.maxAlpha>=(hitState.interactive?HIT_LEAVE_ALPHA:HIT_ENTER_ALPHA);if(keepsHit){hitState.misses=0;publishHit(true,sample,hitState.interactive?'alpha-hold':'alpha-enter')}else if(++hitState.misses>=HIT_MISSES)publishHit(false,sample,'transparent') ;else publishHit(true,sample,'alpha-hysteresis');return hitState}
+function browserPointerAllowed(e){
+  const x=e.clientX, y=e.clientY;
+  if(!insideBody(x,y)) return false;
+  const api=window.RockyScene;
+  if(!api?.isReady) return true;
+  return api.interactionAlpha(x,y,HIT_RADIUS).maxAlpha>=HIT_ENTER_ALPHA;
+}
+// debug outline toggle
+const dbg=document.getElementById('hitbox-debug');
+function setDebug(on){dbg.classList.toggle('on',on); if(window.__rockyLive) window.__rockyLive.hitboxDebug=on;}
+const qp=new URLSearchParams(location.search);
+if(qp.has('debug')||qp.has('showHitbox')||qp.has('hitbox')) setDebug(true);
+window.toggleHitbox=()=>{setDebug(!dbg.classList.contains('on')); return dbg.classList.contains('on');};
+window.addEventListener('keydown',e=>{if(e.key==='h'||e.key==='H') setDebug(!dbg.classList.contains('on'));});
+stage.addEventListener('pointerdown',e=>{if(e.button!==0||!browserPointerAllowed(e))return;bridge.pointerGuard(true);publishHit(true,{maxAlpha:255,strongPixels:1},'pointer-guard');drag={id:e.pointerId,x:e.screenX,y:e.screenY,sx:e.screenX,sy:e.screenY,travel:0,moved:false,pump:null};drag.pump=setInterval(()=>bridge.dragMove(drag?.sx,drag?.sy),16);stage.setPointerCapture(e.pointerId);bridge.dragStart(e.screenX,e.screenY);e.preventDefault()});
+stage.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;drag.sx=e.screenX;drag.sy=e.screenY;drag.travel+=Math.abs(e.movementX||0)+Math.abs(e.movementY||0);if(!drag.moved&&(drag.travel>3||Math.hypot(e.screenX-drag.x,e.screenY-drag.y)>3)){drag.moved=true;stage.classList.add('dragging')}if(drag.moved)bridge.dragMove(e.screenX,e.screenY)});
+function finishDrag(e){if(!drag||e.pointerId!==drag.id)return;const d=drag;clearInterval(d.pump);const canceled=e.type==='pointercancel';stage.classList.remove('dragging');drag=null;Promise.resolve(bridge.dragEnd()).then(moved=>{bridge.pointerGuard(false);sampleHit(e.clientX,e.clientY,{force:true});if(!canceled&&!d.moved&&!moved)surprise()})}
+stage.addEventListener('pointerup',finishDrag);stage.addEventListener('pointercancel',finishDrag);stage.addEventListener('contextmenu',e=>{if(!browserPointerAllowed(e))return;e.preventDefault();contextActive=true;publishHit(true,{maxAlpha:255,strongPixels:1},'menu-guard');bridge.menu();if(!electronBridge)setTimeout(()=>{contextActive=false;sampleHit(e.clientX,e.clientY,{force:true})},200)});window.addEventListener('mousemove',e=>sampleHit(e.clientX,e.clientY));bridge.onWalk(walk);bridge.onCursor?.(({x,y})=>{window.RockyScene?.faceCursor(x,y);sampleHit(x+153,y+94)});bridge.onHitTestRefresh?.(()=>{contextActive=false;if(lastHitPoint)sampleHit(lastHitPoint.x,lastHitPoint.y,{force:true})});bridge.onMousePolicy?.(state=>{if(window.__rockyLive)window.__rockyLive.electronMousePolicy=state});setInterval(()=>{if(lastHitPoint)sampleHit(lastHitPoint.x,lastHitPoint.y,{force:true})},120);publishHit(false,{maxAlpha:0,strongPixels:0},'startup-outside');
+</script></body></html>

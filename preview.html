@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rocky Motion Lab – v13 final (torso 46x35 up6)</title>
+<style>
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:#0f0f0f;color:#e9e9e9}
+  header{padding:12px 16px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
+  h1{font-size:15px;margin:0;font-weight:600}
+  .badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#1f1f1f;border:1px solid #333}
+  .wrap{padding:16px;display:grid;gap:16px}
+  .stage{background:radial-gradient(600px 400px at 50% 30%, #1d1d1d 0%, #0f0f0f 60%);border:1px solid #232323;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center}
+  iframe{border:0;background:transparent; width:276px; height:182px;}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+  button{padding:6px 10px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e9e9e9;cursor:pointer;font-size:12px}
+  button:hover{background:#222}
+  .note{font-size:12px;opacity:.75;max-width:720px;text-align:center;line-height:1.4}
+  a{color:#9ac7ff}
+</style>
+</head>
+<body>
+<header>
+  <h1>Rocky Motion Lab – v13 final (torso hitbox 46×35 at 138,90)</h1>
+  <div class="badge">Outline OFF by default · Press H · torso-only hitbox</div>
+</header>
+<div class="wrap">
+  <div class="stage">
+    <iframe id="pet" src="index.html?web-preview=1&v=tighter-hitbox-v13-bigger-up" title="Rocky Pet"></iframe>
+    <div class="controls">
+      <button id="toggleOutline">Show hitbox outline (H)</button>
+      <button id="idleBtn">Idle</button>
+      <button id="walkBtn">Walk</button>
+      <button id="goodbyeBtn">Goodbye</button>
+      <button id="knockBtn">Knock</button>
+      <button id="mirrorBtn">Mirror</button>
+    </div>
+    <div class="note" style="margin-top:12px">
+      Final Mac build v9 (0.9.0): torso-only ellipse hitbox rx=46 ry=35 centered at 138,90 (10% bigger, moved up 6px). Only Rocky’s central torso is clickable/draggable; limbs and shadow pass through. Grey outline is DEBUG-only and OFF by default. In Electron, short click → Knock / MovieGoodbye, drag anywhere → moves window across displays with position persistence.
+      <br/>Download: <a href="release/Rocky-Desktop-Pet-macOS-Apple-Silicon-v9-torso-v13-final.zip">Mac Apple Silicon .zip</a> (116MB). After unzip, move .app to Applications, if flagged run: <code>xattr -dr com.apple.quarantine "/Applications/RockyDesktopPet.app"</code>
+    </div>
+  </div>
+</div>
+<script>
+const frame = document.getElementById('pet');
+const toggle = document.getElementById('toggleOutline');
+function post(type){ try{ frame.contentWindow.postMessage({type}, '*'); }catch(e){} }
+let outlineOn = false;
+toggle.onclick = ()=>{
+  outlineOn = !outlineOn;
+  const url = new URL(frame.src, location.href);
+  if(outlineOn) url.searchParams.set('showHitbox','1'); else url.searchParams.delete('showHitbox');
+  frame.src = url.toString();
+  toggle.textContent = outlineOn ? 'Hide hitbox outline (H)' : 'Show hitbox outline (H)';
+};
+window.addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='h') toggle.onclick(); });
+document.getElementById('idleBtn').onclick=()=>post('idle');
+document.getElementById('walkBtn').onclick=()=>post('walk');
+document.getElementById('goodbyeBtn').onclick=()=>post('goodbye');
+document.getElementById('knockBtn').onclick=()=>post('knock');
+document.getElementById('mirrorBtn').onclick=()=>post('mirror');
+</script>
+</body>
+</html>
