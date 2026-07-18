@@ -1,65 +1,61 @@
-# 🪨 Rocky Desktop Pet
+# 🪨💫 Rocky Desktop Tamagotchi
 
-> A tiny, transparent, always-on-top macOS companion inspired by the rock xenomorph from *Project Hail Mary* — movie-accurate silhouette, basalt shading, and five expressive limbs.
+> Your tiny rocky roommate from *Project Hail Mary* — now as a desktop tamagotchi. Transparent, always-on-top, watches your cursor, knocks back, and does a little mirror dance.
 
 ![Rocky idle](docs/screenshots/rocky-idle.png)
 
-[![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/cozyss/rocky-desktop-pet)
+[![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/cozyss/rocky-desktop-tamagotchi)
 [![Electron](https://img.shields.io/badge/Electron-37-47848F?logo=electron)](#)
 [![Three.js](https://img.shields.io/badge/Three.js-r160-black?logo=three.js)](#)
-[![Version](https://img.shields.io/badge/version-v0.9.0--torso--v13-blue)](package.json)
+[![Version](https://img.shields.io/badge/version-v0.9.0--tamagotchi-blue)](package.json)
+[![License](https://img.shields.io/badge/license-MIT%20+Assets%20see%20DISCLAIMER-yellow)](#disclaimer)
 
 ---
 
-## ✨ What it is
+## ✨ What is this tamagotchi?
 
-Rocky lives on your desktop as a 276×182 transparent window. No dock icon, no shadow, just stone. He watches your cursor, waves goodbye, knocks on the xenonite, and does a little mirror dance when you ask.
+Rocky is **276×182 px of pure stone**. No dock icon, no background — just a basalt creature living on your transparent window:
 
-This repo is the **private, full-fidelity Rocky build** that uses the official promotional STL-derived articulated GLB (11 joints, 5 clips) and the polished Final Look v4 materials. For a clean-room MIT-licensed generic engine without any film assets, see [cozyss/pentapod-desktop-pet](https://github.com/cozyss/pentapod-desktop-pet).
+- 👀 **Watches your cursor** (canonical face = gap between the two forearms used in Movie Goodbye)
+- 👋 **Short click on torso** → randomly `Movie Goodbye` 👋 or `Knock` ✊ (faces you first, then performs)
+- 🫸 **Limbs click-through** → click where his arm is and you click the app behind — no more misclicks
+- 🪟 **Drag anywhere on torso** — works across monitors, position saved
+- 💃 **5 actions**: `CuteIdle`, `Walk`, `MovieGoodbye`, `Knock`, `MirrorDance`
 
-## 📸 Gallery
+Think Tamagotchi meets desktop companion — less feeding, more knocking.
 
-| Idle | Walk | Goodbye (Movie) | Knock | Mirror Dance |
-|------|------|-----------------|-------|--------------|
-| ![](docs/screenshots/rocky-idle.png) | ![](docs/screenshots/rocky-walk.png) | ![](docs/screenshots/rocky-goodbye.png) | ![](docs/screenshots/rocky-knock.png) | See contact sheet |
+### Gallery
 
-### Contact sheets
+| Idle | Walk | Goodbye | Knock |
+|------|------|---------|-------|
+| ![](docs/screenshots/rocky-idle.png) | ![](docs/screenshots/rocky-walk.png) | ![](docs/screenshots/rocky-goodbye.png) | ![](docs/screenshots/rocky-knock.png) |
 
-Full action overview (body-only hitbox v10, still the same look as v13):
+**Contact sheet + hitbox viz:**
 
 ![Contact sheet](docs/screenshots/rocky-contact-v10.png)
+![Hitbox](docs/screenshots/rocky-contact-hitbox.png)
+![Idle hitbox](docs/screenshots/rocky-idle-hitbox.png)
 
-### Hitbox visualization – torso-only clickable
+Live web preview: https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v13-bigger-up&showHitbox=1
+Press **H** to toggle hitbox outline.
 
-In v13 final the **clickable area is only Rocky's torso ellipse** (rx=46, ry=35 at 138,90). Limbs, shadow and transparent corners pass through so you stop misclicking.
+---
 
-- Body center → interactive
-- Far limb / shadow / corner → click-through
-- Outline is OFF by default, toggle with **H** or `?showHitbox=1`
+## 🎮 Features — v0.9.0 / torso-v13 final
 
-![Hitbox outline](docs/screenshots/rocky-contact-hitbox.png)
-![Idle with hitbox](docs/screenshots/rocky-idle-hitbox.png)
+- **276×182 tight crop** (was 400×330) — only ~2 px transparent margin
+- **Torso-only ellipse hitbox** `rx=46 ry=35 at 138,90` — body interactive, limbs/shadow/corner = pass-through
+- **Alpha-aware hysteresis** `enter 36 / leave 18 / radius 5 / misses 2` — shadow never clickable
+- **5 film-inspired clips** baked from articulated 11-joint rig
+- **Outer facing pivot** so `CuteIdle`/`Walk` animations never fight cursor/viewer facing
+- **Transparent, Electron safe**: no opaque stage, no network, ACES + sRGB, DPR capped 1.35, ≤100k tris
+- **Drag suppression**: drag never triggers action
 
-Live preview: [rocky-motion-lab • v13 bigger-up](https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v13-bigger-up&showHitbox=1)
+## 📦 Install — macOS Apple Silicon
 
-## 🎮 Features – v0.9.0 / v13 final
-
-- **276×182 tight window** – 40%+ smaller than original 400×330, 10% smaller than v6, only ~2 px margins around solid pixels
-- **Torso-only ellipse hitbox** – only central body is interactive; limbs click through
-- **Alpha-aware hysteretic hit testing** – enter 36 / leave 18, radius 5, 2 misses required, shadow not clickable
-- **5 film-inspired actions** – `CuteIdle`, `Walk`, `MovieGoodbye`, `Knock`, `MirrorDance`
-- **Canonical face = forearm gap** – bisector of Limb1/Limb2 used by MovieGoodbye; outer pivot so animation clips never fight facing
-- **Cursor following** – smooth yaw with extremes ±0.5 rad; click actions first face viewer then hold
-- **Drag anywhere** – across displays, position persisted and validated; drag never triggers action
-- **Right-click menu** – Walk / Quit
-- **Final Look v4 materials** – warm basalt #55483C-#66584A palette, roughness 0.84-0.92, subtle mineral bands, transparent-safe contact shadow (1.8×0.8 plane, opacity 0.15)
-- **Electron 37, Three r160, DPR capped 1.35, no WebGL errors**
-
-## 📦 Install – macOS Apple Silicon
-
-1. Download latest ZIP from [Releases](https://github.com/cozyss/rocky-desktop-pet/releases) or `release/` folder (`Rocky-Desktop-Pet-macOS-Apple-Silicon-v9-torso-v13-final.zip`, SHA-256 `94660a7463cd...`)
-2. Unzip → move `RockyDesktopPet.app` to `/Applications`
-3. Open. If Gatekeeper says damaged:
+1. Download `Rocky-Desktop-Pet-macOS-Apple-Silicon-v9-torso-v13-final.zip` (116 MB, SHA-256 `94660a7463cd3d8f657a23de823dcbed3ba49272fb43f311e46999eeac024245`) from Releases or `release/` folder in this repo.
+2. Unzip → `RockyDesktopPet.app` → `/Applications`
+3. First open: if Gatekeeper says damaged:
 
 ```bash
 xattr -dr com.apple.quarantine "/Applications/RockyDesktopPet.app"
@@ -70,43 +66,70 @@ App is ad-hoc signed, not notarized.
 
 ## 🕹️ Usage
 
-- **Drag**: grab torso and move. Works across monitors.
-- **Short click on torso**: randomly `MovieGoodbye` or `Knock` only; Rocky first turns to face you, then performs, then resumes cursor follow.
-- **Click on limb / shadow / transparent**: passes through to the app behind – no misclick.
-- **Right click**: Walk / Quit.
+- **Drag torso** → move anywhere across displays
+- **Short click torso** → Goodbye or Knock (viewer-facing)
+- **Click limb / transparent** → passes through
+- **Right-click** → Walk / Quit menu
 
 ## 🛠️ Dev
 
-Node 22 required (`nvm use`).
+Node 22 required.
 
 ```sh
 npm ci
-npm run build   # builds rocky3d-tighter-hitbox-v13-bigger-up.js → dist?
+npm run build   # esbuild src/scene.js → rocky3d-tighter-hitbox-v13-bigger-up.js
 npm start       # electron .
-npm run check   # syntax checks main + preload
+npm run check
 ```
 
-Key files:
+Key files: `main.js` (276×182 window + persistence), `src/scene.js` (GLB loader + facing + 5 clips), `index.html` (ellipse hit test), `preview.html` (public tunnel preview).
 
-- `main.js` – 276×182 window, migration from legacy 340×285, position persistence, walk window motion
-- `src/scene.js` – THREE setup, GLB loader for `assets/rocky-full-rig-multi-action-final-v2d.glb`, facing pivot outside mixer, 5 clips map, contact shadow 1.8×0.8
-- `index.html` – 276×182 stage, ellipse body hit test `BODY_RX=46 BODY_RY=35 BODY_CENTER_Y=90`, drag/menu guards, H to toggle outline
-- `preview.html` – public preview used by rocky-motion-lab tunnel
+## 🧬 Two modes in one repo (consolidated)
 
-Versioning: `package.json` 0.9.0, `VERSION='tighter-hitbox-v13-bigger-up'` in scene + main + preview + cache bust.
+This repo now consolidates the previous two:
 
-## 📚 Credits / Sources
+- **Full-fidelity Rocky mode (default)**: Uses `assets/rocky-full-rig-multi-action-final-v2d.glb` — 11 joints, 5 clips, Final Look v4 basalt materials. Looks exactly like movie Rocky. **Assets are NOT MIT — see Disclaimer below.**
+- **Clean-room generic mode**: Comes from former `pentapod-desktop-pet`. Delete/rename the GLB, or launch with `?privateAsset=1` or set `private-assets/pet.glb`, and the app falls back to procedural dodecahedron pentapod (100% original, MIT). You can also build `dist/renderer.js` from `src/renderer/scene.js` which contains the generic body + limbs if you remove the GLB.
 
-- Rocky design inspired by *Project Hail Mary* (Andy Weir novel & Amazon MGM film). Official promo model: promotional STL archive from Amazon MGM (no redistribution license, private use only in this repo).
-- Three.js (MIT), Electron (MIT), esbuild (MIT)
-- Procedural fallback placeholder and icon are original.
-
-See `CREDITS.md` / `SOURCES.md` / `LEGAL.md` in the public clean-room repo for full canonical references. This private repo does not grant rights to redistribute official film assets.
-
-## ⚖️ License
-
-Code in this repo (main, preload, scene, preview) is MIT where original, but the bundled GLB `assets/rocky-full-rig-multi-action-final-v2d.glb` and some screenshots are derived from promotional film assets and are **not licensed for redistribution**. Do not publish this GLB or its derivatives publicly. For public sharing, use [pentapod-desktop-pet](https://github.com/cozyss/pentapod-desktop-pet) which ships only original procedural geometry.
+So you get both: gorgeous Rocky for personal use, plus MIT-safe engine you can publish.
 
 ---
 
-Made with ☄️ for desktop companionship. Rocky says: *three knocks means “I’m here.”*
+## 📚 Credits / Sources
+
+- Rocky & *Project Hail Mary* universe created by Andy Weir — novel + Amazon MGM Studios film. This is a **fan-made tamagotchi**, not affiliated/endorsed by Andy Weir, Penguin Random House, Amazon MGM.
+- Official promo STL set used as reference to build articulated rig (Amazon MGM promo archive) — no redistribution license found.
+- Three.js r160 MIT, Electron 37 MIT, esbuild MIT
+- Procedural fallback model + icon are original.
+
+See `CREDITS.md`, `SOURCES.md` for canonical URLs. Research refs: Official Amazon MGM “Grace Meets Rocky” clip (YouTube t3GaBssOgv8), GIPHY promo loop, Creating Rocky video, trailer transcripts.
+
+---
+
+## ⚠️ Disclaimer / Legal — PLEASE READ
+
+**Fan-made / not official.** This is an independent, non-commercial fan project inspired by *Project Hail Mary*. Not affiliated with, endorsed by, or sponsored by Andy Weir, Andy Weir’s publishers, Amazon MGM Studios, or any related parties. Rocky character/design rights belong to respective rights holders.
+
+**Two asset classes:**
+
+1. **Code & procedural placeholder**: `main.js`, `preload.js`, `src/scene.js`, `index.html`, `preview.html`, docs, shaders, and the procedural dodecahedron model are original and offered under MIT (see `LICENSE`). The abstract icon is original.
+
+2. **Film-derived assets**: `assets/rocky-full-rig-multi-action-final-v2d.glb`, `rocky-fallback-v4.png`, screenshots in `docs/screenshots/` that show Rocky likeness, and any release ZIPs that bundle them are **derived from promotional materials**. We found **no public license permitting redistribution**. They are included here for **personal, non-commercial, educational / portfolio use only** — exactly as the prior `rocky-pet` private build. **You may NOT redistribute the GLB/screenshots/ZIP commercially or as part of a competing product without permission from the rights holder.**
+
+   If you want 100% MIT that you can publish anywhere, use **generic mode**: remove `assets/*.glb` + `docs/screenshots/*.png` + `release/*.zip` and rely on procedural geometry (`private-assets/pet.glb` override). That path is MIT-only and safe.
+
+No trademarks are transferred. Publicity/personality rights not granted. This repo does not provide legal advice — you are responsible for ensuring you have rights for your use. Rights holders may request takedown and we will comply.
+
+**Why we consolidated:** Previously we had `cozyss/pentapod-desktop-pet` (clean MIT) + `cozyss/rocky-desktop-pet` (full Rocky). To avoid confusion, we renamed to `rocky-desktop-tamagotchi` and consolidated both modes in one repo with clear disclaimer. The old pentapod repo now redirects here and will be archived.
+
+---
+
+## ⚖️ License
+
+- **Code**: MIT — see `LICENSE`
+- **Assets**: see Disclaimer + `ASSET_POLICY.md` + `LEGAL.md` — film-derived assets are NOT MIT.
+
+---
+
+Made with ☄️ for people who wanted Rocky on their desk. *Three knocks means “I’m here.”*
+

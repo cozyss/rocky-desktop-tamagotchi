@@ -1,10 +1,10 @@
 {
-  "name": "rocky-desktop-pet",
+  "name": "rocky-desktop-tamagotchi",
   "version": "0.9.0",
-  "description": "A tiny five-limbed stone desktop companion",
+  "description": "Rocky Desktop Tamagotchi - transparent torso-only macOS companion inspired by Project Hail Mary, 276x182, 5 actions, fan-made",
   "main": "main.js",
   "author": "Riley Shu",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "start": "electron .",
     "pack:arm64": "./node_modules/.bin/electron-packager . RockyDesktopPet --platform=darwin --arch=arm64 --out=release --overwrite --asar --prune=true --icon=icons/rocky.icns --app-bundle-id=com.riley.rockydesktoppet --app-version=0.9.0 --ignore='^/(release|rig-lab|captures|tools|src|official-reference|\\.git|node_modules/(?!three|@electron))'",
