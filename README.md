@@ -20,8 +20,9 @@
 
 **Direct preview links:**
 - Latest: https://rocky-motion-lab.on-solid.com/preview.html
-- Versioned v13 final: https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v13-bigger-up
-- Hitbox debug on: https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v13-bigger-up&showHitbox=1
+- Versioned v14 movie-dance: https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v14-movie-dance
+- Legacy v13: https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v13-bigger-up
+- Hitbox debug on: https://rocky-motion-lab.on-solid.com/preview.html?v=tighter-hitbox-v14-movie-dance&showHitbox=1
 
 ---
 
@@ -64,11 +65,12 @@ SHA-256: `94660a7463cd3d8f657a23de823dcbed3ba49272fb43f311e46999eeac024245` • 
 - 🚶 **Walk** – window itself marches across screens
 - 👋 **MovieGoodbye** – inner-forearm graze, 5 strokes (like film)
 - ✊ **Knock** – 3 taps on xenonite wall
-- 💃 **MirrorDance** – awkward puppet sync / Macarena-like mirror
+- 💃 **MirrorDance v2 (movie-accurate)** – 4.0s first-contact mimicry: shy wave (1), arms wide (15), cross front (22), hands on head (30), hands on hips (38), gun-draw point (44), recoil bounce (48), double-bounce dip (58), celebratory wide (68), tucked prep (82) → exact loop; bunraku micro-rock, tripod feet locked, drift 5e-07m
 
 **Contact sheets:**
 
 ![Contact](docs/screenshots/rocky-contact-v10.png)
+![Mirror Dance v2 — 12 beats movie-accurate](docs/screenshots/rocky-mirror-dance-v14.png)
 ![Hitbox - torso only 46x35](docs/screenshots/rocky-contact-hitbox.png)
 
 ---
@@ -80,7 +82,7 @@ SHA-256: `94660a7463cd3d8f657a23de823dcbed3ba49272fb43f311e46999eeac024245` • 
 
 ---
 
-### ✨ Features — v0.9.0 / torso-v13 final
+### ✨ Features — v0.9.1 / torso-v14 movie-dance final
 
 - 276×182 tight window (40% smaller than original 400×330)
 - Torso-only ellipse hitbox rx=46 ry=35 at 138,90 — limbs click-through

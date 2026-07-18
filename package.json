@@ -1,19 +1,20 @@
 {
-  "name": "rocky-desktop-tamagotchi",
-  "version": "0.9.0",
-  "description": "Rocky Desktop Tamagotchi - transparent torso-only macOS companion inspired by Project Hail Mary, 276x182, 5 actions, fan-made",
-  "main": "main.js",
-  "author": "Riley Shu",
-  "license": "MIT",
-  "scripts": {
-    "start": "electron .",
-    "pack:arm64": "./node_modules/.bin/electron-packager . RockyDesktopPet --platform=darwin --arch=arm64 --out=release --overwrite --asar --prune=true --icon=icons/rocky.icns --app-bundle-id=com.riley.rockydesktoppet --app-version=0.9.0 --ignore='^/(release|rig-lab|captures|tools|src|official-reference|\\.git|node_modules/(?!three|@electron))'",
-    "build": "./node_modules/.bin/esbuild src/scene.js --bundle --format=iife --platform=browser --outfile=rocky3d-tighter-hitbox-v13-bigger-up.js"
-  },
-  "devDependencies": {
-    "@electron/packager": "^18.3.6",
-    "electron": "^37.2.3",
-    "esbuild": "^0.25.10",
-    "three": "^0.180.0"
-  }
+    "name": "rocky-desktop-tamagotchi",
+    "version": "0.9.1",
+    "description": "Rocky Desktop Tamagotchi - transparent torso-only macOS companion inspired by Project Hail Mary, 276x182, 5 actions, fan-made",
+    "main": "main.js",
+    "author": "Riley Shu",
+    "license": "MIT",
+    "scripts": {
+        "start": "electron .",
+        "pack:arm64": "./node_modules/.bin/electron-packager . RockyDesktopPet --platform=darwin --arch=arm64 --out=release --overwrite --asar --prune=true --icon=icons/rocky.icns --app-bundle-id=com.riley.rockydesktoppet --app-version=0.9.1 --ignore='^/(release|rig-lab|captures|tools|src|official-reference|\\.git|node_modules/(?!three|@electron))'",
+        "build": "./node_modules/.bin/esbuild src/scene.js --bundle --format=iife --platform=browser --outfile=rocky3d-tighter-hitbox-v14-movie-dance.js"
+    },
+    "devDependencies": {
+        "@electron/packager": "^18.3.6",
+        "electron": "^37.2.3",
+        "esbuild": "^0.25.10",
+        "three": "^0.180.0",
+        "ws": "8.17"
+    }
 }

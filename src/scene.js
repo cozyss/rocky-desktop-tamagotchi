@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-const WIDTH=276,HEIGHT=182,SOURCE_WIDTH=340,SOURCE_HEIGHT=285,CROP_X=32,CROP_Y=97,VERSION='tighter-hitbox-v13-bigger-up';
+const WIDTH=276,HEIGHT=182,SOURCE_WIDTH=340,SOURCE_HEIGHT=285,CROP_X=32,CROP_Y=97,VERSION='tighter-hitbox-v14-movie-dance';
 // Rest-pose shoulder bisector of the MovieGoodbye forearms Limb1/Limb2.
 // Blender XY (x right, y away) -> Three XZ (x right, z=-y): local front=(0.27105,0.37307), yaw=+0.62814 rad.
 const CANONICAL_FACE_LOCAL_YAW=0.62814, VIEWER_PIVOT_YAW=-CANONICAL_FACE_LOCAL_YAW, VIEW_TURN_MS=360;
