@@ -55,8 +55,8 @@ stage.addEventListener('pointerdown',e=>{if(e.button!==0||!browserPointerAllowed
 stage.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;drag.sx=e.screenX;drag.sy=e.screenY;drag.travel+=Math.abs(e.movementX||0)+Math.abs(e.movementY||0);if(!drag.moved&&(drag.travel>3||Math.hypot(e.screenX-drag.x,e.screenY-drag.y)>3)){drag.moved=true;stage.classList.add('dragging')}if(drag.moved)bridge.dragMove(e.screenX,e.screenY)});
 function finishDrag(e){if(!drag||e.pointerId!==drag.id)return;const d=drag;clearInterval(d.pump);const canceled=e.type==='pointercancel';stage.classList.remove('dragging');drag=null;Promise.resolve(bridge.dragEnd()).then(moved=>{bridge.pointerGuard(false);sampleHit(e.clientX,e.clientY,{force:true});if(!canceled&&!d.moved&&!moved)surprise()})}
 stage.addEventListener('pointerup',finishDrag);stage.addEventListener('pointercancel',finishDrag);stage.addEventListener('contextmenu',e=>{if(!browserPointerAllowed(e))return;e.preventDefault();contextActive=true;publishHit(true,{maxAlpha:255,strongPixels:1},'menu-guard');bridge.menu();if(!electronBridge)setTimeout(()=>{contextActive=false;sampleHit(e.clientX,e.clientY,{force:true})},200)});window.addEventListener('mousemove',e=>sampleHit(e.clientX,e.clientY));bridge.onWalk(walk);bridge.onCursor?.(({x,y})=>{window.RockyScene?.faceCursor(x,y);sampleHit(x+153,y+94)});bridge.onHitTestRefresh?.(()=>{contextActive=false;if(lastHitPoint)sampleHit(lastHitPoint.x,lastHitPoint.y,{force:true})});bridge.onMousePolicy?.(state=>{if(window.__rockyLive)window.__rockyLive.electronMousePolicy=state});setInterval(()=>{if(lastHitPoint)sampleHit(lastHitPoint.x,lastHitPoint.y,{force:true})},120);publishHit(false,{maxAlpha:0,strongPixels:0},'startup-outside');
+</script>
 <script>
-</script></body></html>
 window.addEventListener('message', function(e){
   var data = e.data || {};
   var type = (data.type||'').toLowerCase();
@@ -89,3 +89,4 @@ window.addEventListener('message', function(e){
   }catch(err){ console.error('msg handler', err); }
 });
 </script>
+</body></html>
