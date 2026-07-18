@@ -3,62 +3,196 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Rocky Motion Lab – v13 final (torso 46x35 up6)</title>
+<title>Rocky Desktop Tamagotchi – Live Web Preview</title>
+<meta property="og:title" content="Rocky Desktop Tamagotchi - Live Preview"/>
+<meta property="og:description" content="Transparent macOS desktop companion inspired by Project Hail Mary. Try Rocky in your browser!"/>
 <style>
-  body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:#0f0f0f;color:#e9e9e9}
-  header{padding:12px 16px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
-  h1{font-size:15px;margin:0;font-weight:600}
-  .badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#1f1f1f;border:1px solid #333}
-  .wrap{padding:16px;display:grid;gap:16px}
-  .stage{background:radial-gradient(600px 400px at 50% 30%, #1d1d1d 0%, #0f0f0f 60%);border:1px solid #232323;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center}
-  iframe{border:0;background:transparent; width:276px; height:182px;}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-  button{padding:6px 10px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e9e9e9;cursor:pointer;font-size:12px}
-  button:hover{background:#222}
-  .note{font-size:12px;opacity:.75;max-width:720px;text-align:center;line-height:1.4}
-  a{color:#9ac7ff}
+  :root { --bg:#0e0e10; --card:#17171b; --card2:#1f1f24; --border:#2a2a32; --text:#ececf0; --muted:#9a9ab0; --accent:#7dd3a3; --accent2:#9ac7ff; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text);line-height:1.45}
+  a{color:var(--accent2);text-decoration:none} a:hover{text-decoration:underline}
+  header{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:rgba(14,14,16,.86);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+  header h1{margin:0;font-size:15px;font-weight:700;display:flex;gap:8px;align-items:center}
+  header .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .badge{font-size:11px;padding:5px 9px;border-radius:999px;background:var(--card);border:1px solid var(--border);color:var(--muted)}
+  .btn{padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+  .btn:hover{background:#2a2a32;transform:translateY(-1px)}
+  .btn-primary{background:var(--text);color:#0e0e10;border-color:var(--text)} .btn-primary:hover{background:#fff}
+  .btn-accent{background:var(--accent);color:#0e0e10;border-color:var(--accent)} .btn-accent:hover{filter:brightness(1.08)}
+  .wrap{max-width:960px;margin:0 auto;padding:18px}
+  .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:start;margin-top:8px}
+  @media(max-width:800px){.hero{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .card h2{margin:0 0 8px;font-size:14px}
+  .card h3{margin:14px 0 6px;font-size:13px;opacity:.9}
+  .muted{color:var(--muted);font-size:12.5px}
+  .steps{display:grid;gap:8px}
+  .step{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;background:var(--card2);border:1px solid var(--border)}
+  .step .icon{width:28px;height:28px;border-radius:8px;background:#23232a;display:grid;place-items:center;font-size:14px;flex:0 0 28px}
+  .mac-wallpaper{background:radial-gradient(900px 500px at 70% 20%, #2b2b44 0%, #15151d 40%, #0e0e10 80%), linear-gradient(180deg, #1e1e2a 0%, #0e0e10 100%);border:1px solid var(--border);border-radius:18px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;overflow:hidden}
+  .mac-wallpaper:before{content:'';position:absolute;inset:0;background:radial-gradient(400px 200px at 50% 0%, rgba(125,211,163,.18), transparent 60%);pointer-events:none}
+  .mac-topbar{width:100%;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:11px;color:var(--muted)}
+  .pet-container{width:276px;height:182px;border-radius:12px;background:repeating-conic-gradient(from 0deg, #1a1a1e 0deg 10deg, #18181c 10deg 20deg);border:1px dashed #2e2e38;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06)}
+  .pet-container iframe{border:0;background:transparent;width:276px;height:182px;border-radius:12px;display:block}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .controls button{padding:7px 12px}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.5;text-align:center;max-width:640px}
+  .download-hero{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+  .download-hero .big{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap}
+  .kpi div{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:6px 10px;font-size:11px}
+  pre{margin:0;padding:10px;border-radius:10px;background:#111114;border:1px solid var(--border);font-size:11px;overflow:auto;color:#c8c8d6}
+  footer{padding:20px 18px;border-top:1px solid var(--border);color:var(--muted);font-size:11px;text-align:center}
 </style>
 </head>
 <body>
 <header>
-  <h1>Rocky Motion Lab – v13 final (torso hitbox 46×35 at 138,90)</h1>
-  <div class="badge">Outline OFF by default · Press H · torso-only hitbox</div>
+  <h1>🪨💫 Rocky Desktop Tamagotchi <span style="opacity:.5;font-weight:500">— live web preview</span></h1>
+  <div class="right">
+    <span class="badge">torso-only hitbox • 276×182 • v13 final</span>
+    <a class="btn btn-accent" href="https://github.com/cozyss/rocky-desktop-tamagotchi/releases" target="_blank">⬇️ Download Mac App</a>
+    <a class="btn" href="https://github.com/cozyss/rocky-desktop-tamagotchi" target="_blank">GitHub</a>
+  </div>
 </header>
+
 <div class="wrap">
-  <div class="stage">
-    <iframe id="pet" src="index.html?web-preview=1&v=tighter-hitbox-v13-bigger-up" title="Rocky Pet"></iframe>
-    <div class="controls">
-      <button id="toggleOutline">Show hitbox outline (H)</button>
-      <button id="idleBtn">Idle</button>
-      <button id="walkBtn">Walk</button>
-      <button id="goodbyeBtn">Goodbye</button>
-      <button id="knockBtn">Knock</button>
-      <button id="mirrorBtn">Mirror</button>
+  <div class="card" style="background:linear-gradient(180deg, #1c1c22 0%, #17171b 100%);border-color:#2f2f3a">
+    <div class="download-hero">
+      <div class="big">Your tiny rocky roommate is now a tamagotchi.</div>
+      <div class="muted" style="max-width:620px">This page is a <b>browser preview</b> of what Rocky looks like on your real Mac desktop. On your Mac he lives in a <b>transparent, always-on-top window</b> (276×182) with no background — you can drag him around, he watches your cursor, and only his torso is clickable so you never misclick.</div>
+      <div class="kpi">
+        <div>🖱️ Drag torso → move across monitors</div>
+        <div>👋 Click torso → Goodbye / Knock</div>
+        <div>✋ Limb click → passes through</div>
+        <div>📦 ZIP 116 MB — Apple Silicon</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <a class="btn btn-primary" href="https://github.com/cozyss/rocky-desktop-tamagotchi/releases/download/v0.9.0-tamagotchi/Rocky-Desktop-Tamagotchi-macOS-Apple-Silicon-v0.9.0.zip" id="dlBtn">⬇️ Download v0.9.0 for Mac (Apple Silicon)</a>
+        <button class="btn" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How to play ▶</button>
+      </div>
+      <pre id="gatekeeper">After unzip:
+xattr -dr com.apple.quarantine "/Applications/RockyDesktopPet.app"
+open "/Applications/RockyDesktopPet.app"
+# App is ad-hoc signed, not notarized. First open → Allow in System Settings if needed.</pre>
     </div>
-    <div class="note" style="margin-top:12px">
-      Final Mac build v9 (0.9.0): torso-only ellipse hitbox rx=46 ry=35 centered at 138,90 (10% bigger, moved up 6px). Only Rocky’s central torso is clickable/draggable; limbs and shadow pass through. Grey outline is DEBUG-only and OFF by default. In Electron, short click → Knock / MovieGoodbye, drag anywhere → moves window across displays with position persistence.
-      <br/>Download: <a href="release/Rocky-Desktop-Pet-macOS-Apple-Silicon-v9-torso-v13-final.zip">Mac Apple Silicon .zip</a> (116MB). After unzip, move .app to Applications, if flagged run: <code>xattr -dr com.apple.quarantine "/Applications/RockyDesktopPet.app"</code>
+  </div>
+
+  <div class="hero">
+    <div class="mac-wallpaper">
+      <div class="mac-topbar"><span>Finder • Rocky Preview • 🪨</span><span>Sat 9:41 • 100% 🪫</span></div>
+      <div class="pet-container">
+        <iframe id="pet" src="index.html?web-preview=1&v=tighter-hitbox-v13-bigger-up" title="Rocky Pet"></iframe>
+      </div>
+      <div class="controls">
+        <button class="btn" id="idleBtn">😌 Idle</button>
+        <button class="btn" id="walkBtn">🚶 Walk</button>
+        <button class="btn" id="goodbyeBtn">👋 Goodbye</button>
+        <button class="btn" id="knockBtn">✊ Knock</button>
+        <button class="btn" id="mirrorBtn">💃 Dance</button>
+        <button class="btn" id="toggleOutline">🎯 Show hitbox (H)</button>
+      </div>
+      <div class="note">In the real Mac app, <b>short click on torso</b> randomly does Goodbye or Knock and first turns to face you. Drag = move window. This web preview simulates those <b>via buttons</b> + direct click on Rocky.</div>
+    </div>
+
+    <div class="steps" id="how">
+      <div class="card">
+        <h2>🎮 How to play on Mac — visible in 10 seconds</h2>
+        <div class="steps">
+          <div class="step"><div class="icon">1️⃣</div><div><b>Download & open</b><div class="muted">Get the ZIP from Releases, move .app to Applications, run the xattr command if Gatekeeper blocks, then open.</div></div></div>
+          <div class="step"><div class="icon">2️⃣</div><div><b>Drag anywhere on torso</b><div class="muted">Grab Rocky's body and move him. Works across multiple monitors. Position is remembered.</div></div></div>
+          <div class="step"><div class="icon">3️⃣</div><div><b>Click torso for surprise</b><div class="muted">Short click = Movie Goodbye 👋 or Knock ✊ (random, viewer-facing). Drag never triggers an action.</div></div></div>
+          <div class="step"><div class="icon">4️⃣</div><div><b>Ignore limbs</b><div class="muted">Only torso is interactive. Click on arm/shadow/transparent → clicks the app behind — no accidental clicks.</div></div></div>
+          <div class="step"><div class="icon">5️⃣</div><div><b>Right-click menu</b><div class="muted">Walk / Quit. Walk moves the actual window like he's marching.</div></div></div>
+        </div>
+        <h3>💡 What you can do</h3>
+        <div class="muted">
+          • Let him idle and watch your cursor (face = gap between two forearms)<br/>
+          • Make him walk across screens<br/>
+          • Hear his knock-knock (3 taps on xenonite wall)<br/>
+          • Goodbye wave — inner-forearm graze, 5 strokes<br/>
+          • Mirror dance — awkward puppet sync, like in the film promo<br/>
+          • Press H to see torso-only hitbox (debug)
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🛠️ Tech specs</h2>
+        <div class="muted" style="display:grid;gap:6px">
+          <div>• Window 276×182 (40% smaller than original 400×330)</div>
+          <div>• Torso-only ellipse hitbox rx=46 ry=35 at 138,90</div>
+          <div>• Alpha-aware hysteresis enter 36 / leave 18 / radius 5</div>
+          <div>• 11 joints, 5 clips, Final Look v4 basalt material</div>
+          <div>• Electron 37 • Three r160 • DPR 1.35 • 60fps</div>
+          <div>• <a href="https://github.com/cozyss/rocky-desktop-tamagotchi" target="_blank">Source + DISCLAIMER</a> — code MIT, film-derived GLB personal use only</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<footer>
+  Fan-made tamagotchi inspired by Project Hail Mary — not affiliated with Amazon MGM. Code MIT, Rocky GLB personal use only (see DISCLAIMER.md). Live preview is a browser simulation; real app is transparent on macOS.
+  <br/> <a href="https://github.com/cozyss/rocky-desktop-tamagotchi/releases">Releases</a> • <a href="https://github.com/cozyss/rocky-desktop-tamagotchi">GitHub</a> • <span id="status">preview v13 • torso-only</span>
+</footer>
+
 <script>
 const frame = document.getElementById('pet');
-const toggle = document.getElementById('toggleOutline');
-function post(type){ try{ frame.contentWindow.postMessage({type}, '*'); }catch(e){} }
+function post(type){
+  try{
+    const win = frame.contentWindow;
+    if(!win){ console.warn('no frame win'); return; }
+    win.postMessage({type}, '*');
+    // also try direct API if available
+    const api = win.RockyScene || win.__rockyLive;
+    console.log('post', type, 'api?', !!win.RockyScene);
+  }catch(e){ console.error(e); }
+}
 let outlineOn = false;
-toggle.onclick = ()=>{
+function setOutlineBtn(){
+  document.getElementById('toggleOutline').textContent = outlineOn ? '🎯 Hide hitbox (H)' : '🎯 Show hitbox (H)';
+}
+document.getElementById('toggleOutline').onclick = ()=>{
   outlineOn = !outlineOn;
-  const url = new URL(frame.src, location.href);
-  if(outlineOn) url.searchParams.set('showHitbox','1'); else url.searchParams.delete('showHitbox');
-  frame.src = url.toString();
-  toggle.textContent = outlineOn ? 'Hide hitbox outline (H)' : 'Show hitbox outline (H)';
+  try{
+    frame.contentWindow.postMessage({type:'toggleHitbox', on: outlineOn}, '*');
+  }catch(e){}
+  // fallback: rewrite URL only if direct call fails
+  if(!frame.contentWindow?.toggleHitbox){
+    const url = new URL(frame.src, location.href);
+    if(outlineOn) url.searchParams.set('showHitbox','1'); else url.searchParams.delete('showHitbox');
+    frame.src = url.toString();
+  }
+  setOutlineBtn();
 };
-window.addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='h') toggle.onclick(); });
+window.addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='h'){ outlineOn=!outlineOn; document.getElementById('toggleOutline').click(); }});
 document.getElementById('idleBtn').onclick=()=>post('idle');
 document.getElementById('walkBtn').onclick=()=>post('walk');
 document.getElementById('goodbyeBtn').onclick=()=>post('goodbye');
 document.getElementById('knockBtn').onclick=()=>post('knock');
 document.getElementById('mirrorBtn').onclick=()=>post('mirror');
+
+// show load status
+frame.addEventListener('load', ()=>{
+  try{
+    const w = frame.contentWindow;
+    const live = w.__rockyLive ? 'loaded='+w.__rockyLive.loaded+' clips='+ (w.__rockyLive.clips?.length||0) : 'no live';
+    document.getElementById('status').textContent = 'iframe loaded • ' + live;
+  }catch(e){ document.getElementById('status').textContent = 'iframe loaded (cross-origin?)'; }
+});
+
+// Auto-update download link to latest release if available
+fetch('https://api.github.com/repos/cozyss/rocky-desktop-tamagotchi/releases/latest')
+  .then(r=>r.json()).then(data=>{
+    if(data && data.assets && data.assets.length){
+      const zip = data.assets.find(a=>a.name.endsWith('.zip')) || data.assets[0];
+      if(zip){
+        const btn = document.getElementById('dlBtn');
+        btn.href = zip.browser_download_url;
+        btn.textContent = '⬇️ Download '+ (data.tag_name||'latest') + ' for Mac (Apple Silicon) — ' + (Math.round(zip.size/1024/1024)) + ' MB';
+      }
+    }
+  }).catch(()=>{});
+setOutlineBtn();
 </script>
 </body>
 </html>
